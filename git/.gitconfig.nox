@@ -1,0 +1,30 @@
+[core]
+	excludesfile = /Users/Ethan/.gitignore
+	editor = "emacsclient -c"
+[diff]
+	tool = emerge 
+#[difftool "sourcetree"]
+#	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+#	path =
+[difftool]
+	prompt = false
+[difftool "ediff"]
+	cmd = emacs --eval \"(ediff-files \\\"$1\\\" \\\"$2\\\")\"
+[difftool "ediffclient"]
+	cmd = emacsclient -nw --eval \"(ediff-files \\\"$LOCAL\\\" \\\"$REMOTE\\\")\"
+	
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[user]
+	name = Yicheng Luo
+	email = ethanluoyc@gmail.com
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
+[merge]
+	tool = emerge
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 

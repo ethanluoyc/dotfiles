@@ -49,9 +49,7 @@ CASE_SENSITIVE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(zsh-syntax-highlighting git brew osx man-preview pfs cdf autojump tab)
-. ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
-. ~/.oh-my-zsh/custom/plugins/z/z.sh
+plugins=(zsh-syntax-highlighting z git brew osx man-preview pfs cdf autojump tab)
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
@@ -59,25 +57,16 @@ export LC_ALL=en_US.UTF-8
 
 # User configuration
 
-export PATH="/usr/local/texbin:/usr/local/bin:/usr/bin:/Users/Ethan/anaconda/bin:/usr/local/heroku/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/mysql/bin:/opt/X11/bin:/usr/local/git/bin:/usr/texbin:$PATH"
-# export MANPATH="/usr/local/man:$MANPATH"
-
-export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
-
-source $ZSH/oh-my-zsh.sh
-if [ -z $INSIDE_EMACS ]; then
-  powerline-daemon -q
-  . /Users/Ethan/anaconda/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
-  export VIRTUAL_ENV_DISABLE_PROMPT=true
-fi
-
 # Preferred editor for local and remote sessions
+
+export ALTERNATE_EDITOR=""
+
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
   export EDITOR='mvim'
 fi
-export ALTERNATE_EDITOR=""
+
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
