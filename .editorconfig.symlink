@@ -1,0 +1,4 @@
+root = true
+[*.{coffee,less}]
+indent_style = space
+indent_size = 2
