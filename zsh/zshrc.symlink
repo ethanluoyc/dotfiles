@@ -41,3 +41,9 @@ do
 done
 
 unset config_files
+
+eval `opam config env`
+
+eval "$(rbenv init -)"
+
+export PATH=./node_modules/.bin:$PATH

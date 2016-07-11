@@ -1,3 +1,20 @@
 .DS_Store
 *~
 *.swp
+GPATH
+GRTAGS
+GTAGS
+TAGS
+.dir-locals.el
+
+# IntelliJ IDEA Configuration files
+.idea/
+*.iml
+*.eml
+*.ipr
+*.iws
+
+# Eclipse Configuration files
+.classpath
+.project
+.settings/

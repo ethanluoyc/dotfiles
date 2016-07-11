@@ -49,7 +49,11 @@ CASE_SENSITIVE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(zsh-syntax-highlighting git brew osx man-preview pfs cdf autojump tab)
+plugins=(zsh-syntax-highlighting git brew osx man-preview pfs cdf autojump tab virtualenv)
+
+# enable zsh-completions
+plugins+=(zsh-completions)
+autoload -U compinit && compinit
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
@@ -58,7 +62,7 @@ export LC_ALL=en_US.UTF-8
 
 # User configuration
 
-export PATH="/usr/local/texbin:/usr/local/bin:/usr/bin:/Users/Ethan/anaconda/bin:/usr/local/heroku/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/mysql/bin:/opt/X11/bin:/usr/local/git/bin:/usr/texbin:$PATH"
+# export PATH="/usr/local/texbin:/usr/local/bin:/usr/bin:/Users/Ethan/anaconda/bin:/usr/local/heroku/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/mysql/bin:/opt/X11/bin:/usr/local/git/bin:/usr/texbin:$PATH"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
@@ -75,9 +79,9 @@ source $ZSH/oh-my-zsh.sh
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR='emacs'
+  export EDITOR='emacsclient'
+  export ALTERNATE_EDITOR=""
 fi
-export ALTERNATE_EDITOR=""
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 

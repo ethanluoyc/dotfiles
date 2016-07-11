@@ -18,6 +18,7 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
+     ocaml
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
@@ -26,20 +27,31 @@ values."
      ;; better-defaults
 
      ;; languages
+     sml
+     ipython-notebook
+     github
+     yaml
      markdown
-     c-c++
+     (c-c++ :variables
+            c-c++-enable-clang-support t
+            c-c++-default-mode-for-headers 'c++-mode)
      emacs-lisp
      javascript
+     personal
      html
-     python
-     mit-scheme
-     (latex :variables latex-build-command "LaTeX"
-                       latex-enable-auto-fill t)
-     (ruby :variable ruby-enable-enh-ruby-mode t)
-     ess
+     go
+     (python :variables python-test-runner 'pytest)
+     (latex :variables
+            latex-build-command "latex"
+            latex-enable-auto-fill t)
+     (ruby :variable
+           ruby-enable-enh-ruby-mode t
+           ruby-test-runner 'rspec
+           ruby-version-manager 'rbenv)
      ;; frameworks
-     react
      ruby-on-rails
+     ;; ocaml
+     react
      ;; shell related
      shell-scripts
      (shell :variables
@@ -47,26 +59,33 @@ values."
             shell-default-height 40
             shell-default-position 'bottom)
      ;; tools
+     (version-control :variables
+                      version-control-diff-tool 'git-gutter
+                      version-control-global-margin t)
      dash
+     gtags
      git
      osx
-     auto-completion
+     (auto-completion :variables
+                      auto-completion-enable-snippets-in-popup t
+                      auto-completion-tab-key-behavior 'complete
+                      auto-completion-enable-help-tooltip t)
      org
      syntax-checking
-     themes-megapack
-     vagrant
+     sql
      (matlab :variables
              matlab-indent-function t
-             matlab-shell-command "/Applications/MATLAB_R2015a.app/bin/matlab"))
-   ;; List of additional packages that will be installed without being
-   ;; wrapped in a layer. If you need some configuration for these
+             matlab-shell-command "/applications/matlab_r2015a.app/bin/matlab"))
+   ;; list of additional packages that will be installed without being
+   ;; wrapped in a layer. if you need some configuration for these
    ;; packages then consider to create a layer, you can also put the
    ;; configuration in `dotspacemacs/config'.
    dotspacemacs-additional-packages '(editorconfig
-                                      ecb
-                                      base16-theme)
+                                      osx-clipboard
+                                      rainbow-mode
+                                      )
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '(exec-path-from-shell)
+   dotspacemacs-excluded-packages '()
    ;; dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
@@ -97,15 +116,14 @@ values."
    ;; If the value is nil then no banner is displayed. (default 'official)
    dotspacemacs-startup-banner 'official
    ;; List of items to show in the startup buffer. If nil it is disabled.
-   ;; Possible values are: `recents' `bookmarks' `projects'.
+   ;; Possible values are:
+   ;; `recents' `bookmarks' `projects'.
    ;; (default '(recents projects))
    dotspacemacs-startup-lists '(recents projects)
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
-                         spacemacs-light
-                         )
+   dotspacemacs-themes '(spacemacs-dark)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
@@ -191,7 +209,7 @@ values."
    dotspacemacs-smooth-scrolling t
    ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
    ;; (default nil)
-   dotspacemacs-smartparens-strict-mode t
+   dotspacemacs-smartparens-strict-mode nil
    ;; Select a scope to highlight delimiters. Possible values are `any',
    ;; `current', `all' or `nil'. Default is `all' (highlight any scope and
    ;; emphasis the current one). (default 'all)
@@ -213,26 +231,88 @@ values."
   "Initialization function for user code.
 It is called immediately after `dotspacemacs/init'.  You are free to put any
 user code."
+  (setq
+   vc-follow-symlinks nil ;; Do not ask to follow symbolic links
+   exec-path-from-shell-check-startup-files nil
   )
+)
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
  This function is called at the very end of Spacemacs initialization after
 layers configuration. You are free to put any user code."
-  (menu-bar-mode 1)
-  (editorconfig-mode 1)
-  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
+  ;; Miscellaneous
+  (setq-default
+   vc-follow-symlinks t ;; Follow symlinks without asking
+   indent-tabs-mode nil
+   menu-bar-mode t
+   editorconfig-mode t
+   )
 
-  ;; configure the company face to look good
-  (require 'color)
-  (let ((bg (face-attribute 'default :background)))
-    (custom-set-faces
-     `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 2)))))
-     `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
-     `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
-     `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
-     `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
-  )
+  (setenv "WORKON_HOME" "/Users/Ethan/anaconda/envs")
+  (spacemacs/toggle-truncate-lines-on)
+  ;; (setq rspec-use-rake-when-possible nil)
+  ;; LaTex settings
+  (add-hook 'doc-view-mode-hook 'auto-revert-mode) ;; refresh the pdf previewer automatically
 
-;; Do not write anything past this comment. This is where Emacs will
+  ;; Use Emacs as the editor for editing Git commit messages
+  (global-git-commit-mode t)
+
+  ;; Ruby settings
+  (eval-after-load 'rspec-mode
+    '(rspec-install-snippets))
+  ;; add my org-mode configuration here
+
+  ;; Org
+  (with-eval-after-load 'org
+    ;; here goes your Org config :)
+    ;; ....
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((python . t)
+       (shell . t)
+       ))
+    )
+
+  ;; Diminish
+  (spacemacs|diminish hybrid-mode)
+  (spacemacs|diminish which-key-mode)
+  (spacemacs|diminish rubocop-mode)
+
+  (let ((opam-share (ignore-errors (car (process-lines "opam" "config" "var" "share")))))
+    (when (and opam-share (file-directory-p opam-share))
+      (add-to-list 'load-path (expand-file-name "emacs/site-lisp" opam-share))
+      (autoload 'merlin-mode "merlin" nil t nil)
+      (add-hook 'tuareg-mode-hook 'merlin-mode t)
+      (add-hook 'caml-mode-hook 'merlin-mode t)
+      (setq merlin-command 'opam)))
+
+;; configure the company face to look good
+
+;; Do not write anything paste this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" default)))
+ '(evil-want-Y-yank-to-eol t)
+ '(paradox-github-token t)
+ '(safe-local-variable-values
+   (quote
+    ((pytest-cmd-flags . "")
+     (projectile-project-root-files quote
+                                    (".projectile"))
+     (projectile-project-name . "synergy-basketball")
+     (web-beautify-args quote
+                        ("-f" "-s 2"))))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

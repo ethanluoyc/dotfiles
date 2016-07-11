@@ -1,0 +1,7 @@
+#compdef csa
+# `csa` is my alias of Conda's `source activate`,
+# this snippet completes the environments I have.
+
+local -a conda_envs
+conda_envs=($(conda env list | grep '^[a-zA-Z0-9_-]\{1,\}' | cut -f1 -d' '))
+_describe 'values' conda_envs
